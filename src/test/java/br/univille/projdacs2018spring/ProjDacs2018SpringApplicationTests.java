@@ -46,12 +46,28 @@ public class ProjDacs2018SpringApplicationTests {
 	.andExpect(content().string(containsString("Eu não acredito no Walter")));
 	}
 	
-	@Test
-	public void pacienteControllerTest() throws Exception {
-	//Teste do método index
-	this.mockMvc.perform(get("/paciente")).andDo(print()).andExpect(status().isOk())
-	.andExpect(xpath("//table").exists())
-	.andExpect(xpath("//td[contains(., 'Zezinho')]").exists());
-	}
+	
+    @Test
+    public void pacienteControllerTest() throws Exception {
+        //Teste do método index
+        this.mockMvc.perform(get("/paciente")).andExpect(status().isOk())
+        .andExpect(xpath("/html/body/div/div/table").exists());
+    }
+    
+    @Test
+    public void pacienteControllerSaveTest() throws Exception {
+        this.mockMvc.perform(post("/paciente")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("form", "")
+                .content("id=0&nome=zezinho&sexo=Masculino"))
+                .andDo(print())
+                .andExpect(status().isMovedTemporarily())
+                .andExpect(view().name("redirect:/paciente"));
+        
+        this.mockMvc.perform(get("/paciente")).andDo(print()).andExpect(status().isOk())
+        .andExpect(xpath("/html/body/div/div/table/tbody/tr/td[1]/text()").string("zezinho"))
+        .andExpect(xpath("/html/body/div/div/table/tbody/tr/td[2]/text()").string("Masculino"));
+            
+    }
 
 }
