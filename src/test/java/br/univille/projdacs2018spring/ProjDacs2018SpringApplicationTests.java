@@ -58,7 +58,8 @@ public class ProjDacs2018SpringApplicationTests {
         .andExpect(xpath("/html/body/div/div/table").exists());
     }
     
-    @Test
+    @SuppressWarnings("deprecation")
+	@Test
     public void pacienteControllerSaveTest() throws Exception {
         this.mockMvc.perform(post("/paciente")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
